@@ -1,0 +1,68 @@
+version: '3'
+services:
+  db: 
+      image: mysql:5.7
+      restart: always
+      environment:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: chat-system-dev
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+      ports:
+          - "3307:3306"
+  app: 
+      build: .
+      command:  bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails s -p 3000 -b '0.0.0.0'"
+      volumes: 
+          - ".:/app"
+      ports: 
+          - "3001:3000"
+      depends_on:
+          - db
+      links:
+          - db
+      environment:
+        DB_USER: root
+        DB_NAME: app
+        DB_PASSWORD: password
+        DB_HOST: db
+        
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "7001:80"
+    links:
+      - db:db
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+    networks:
+      - app-network
+
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:6.4.2'
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana.local
+      ELASTICSEARCH_URL: http://es:9200
+    ports:
+      - '5601:5601'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  data:
+  bundle:
