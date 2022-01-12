@@ -26,7 +26,7 @@ services:
         DB_NAME: app
         DB_PASSWORD: password
         DB_HOST: db
-        
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -59,6 +59,12 @@ services:
       - '5601:5601'
     networks:
       - app-network
+  redis:
+    image: redis
+    restart: "always"
+    container_name: redis
+    ports:
+      - "6379:6379"
 
 networks:
   app-network:

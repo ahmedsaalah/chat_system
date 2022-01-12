@@ -17,5 +17,4 @@ RUN bundle install
 COPY . .
 
 RUN  rm -f tmp/pids/server.pid  
-RUN 
 EXPOSE 3000
