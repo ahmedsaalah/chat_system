@@ -18,14 +18,17 @@ services:
       ports: 
           - "3001:3000"
       depends_on:
+          - redis
           - db
       links:
           - db
+          - redis
       environment:
         DB_USER: root
         DB_NAME: app
         DB_PASSWORD: password
         DB_HOST: db
+        REDIS_URL: redis://redis
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
