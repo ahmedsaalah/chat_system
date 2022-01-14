@@ -1,10 +1,10 @@
 class Application < ApplicationRecord
     before_create :set_token 
-    after_create :add_to_redis
+    after_create :add_to_redis_chat_number
     has_many :chats
     
-    def add_to_redis
-        Redis.current.set(self.token, 1)
+    def add_to_redis_chat_number
+        Redis.current.set(self.token, 0)
     end
 
     def set_token
