@@ -19,10 +19,10 @@ class V1::ChatsController < ApplicationController
 
   # POST /chats
   def create
-  
     number = Redis.current.incr(params[:application_id])
-    application_id = Application.where(token: params[:application_id]).first.id
-    CreatorWorker.perform_async("chat",{number: number,application_id: application_id})
+    application_id = Application.where(token: params[:application_id]).pluck(:id)
+    raise ActiveRecord::RecordNotFound unless application_id.present?
+    CreatorWorker.perform_async("chat",{number: number,application_id: application_id.first})
     render json: {number: number }, status: :created
   end
 
@@ -47,8 +47,9 @@ class V1::ChatsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_chat
-      @chat = Application.where(token: params[:application_id]).first.chats.where(number: params[:id])
-      raise ActiveRecord::RecordNotFound unless @chat.present?
+      chats = Application.where(token: params[:application_id]).first.chats.where(number: params[:id])
+      raise ActiveRecord::RecordNotFound unless chats.present?
+      @chat= chats.first
     end
 
     # Only allow a trusted parameter "white list" through.
