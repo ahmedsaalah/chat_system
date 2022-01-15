@@ -1,9 +1,15 @@
 class V1::MessagesController < ApplicationController
   before_action :set_message, only: [:show, :update, :destroy]
+  before_action :set_chat, only: [:create, :index]
+
 
   # GET /messages
   def index
-    @messages = Message.page(params[:page]||1).per(params[:per_page]||10)
+    unless message_params[:query].blank?
+      @messages = Message.search(message_params[:query], @chat_id).page(params[:page]||1).per(params[:per_page]||10).records
+    else
+       @messages = Message.where(chat_id: @chat_id).page(params[:page]||1).per(params[:per_page]||10)
+    end
 
     if @messages.out_of_range?
       render json: {status: 404 , message: "page out of range"},status: :not_found
@@ -21,8 +27,7 @@ class V1::MessagesController < ApplicationController
   # POST /messages
   def create
     number = Redis.current.incr("#{params[:application_id]}-#{params[:chat_id]}")
-    chat_id = Chat.where(number: params[:chat_id]).first.id
-    CreatorWorker.perform_async("message",{text: message_params[:text], number: number, chat_id: chat_id})
+    CreatorWorker.perform_async("message",{text: message_params[:text], number: number, chat_id: @chat_id})
     render json: {number: number }, status: :created
   end
 
@@ -46,8 +51,14 @@ class V1::MessagesController < ApplicationController
       @message = Application.where(token: params[:application_id]).first.chats.where(number: params[:chat_id]).first.messages.find_by(number: params[:id])
     end
 
+    def set_chat
+      application_id = Application.where(token: params[:application_id]).limit(1).pluck(:id)
+      @chat_id = Chat.where(application_id: application_id, number: params[:chat_id]).limit(1).pluck(:id).first
+    end
     # Only allow a trusted parameter "white list" through.
     def message_params
-      params.require(:message).permit(:text)
+      params.permit(:query, :message=>[:text])
     end
+
+    
 end

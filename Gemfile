@@ -12,6 +12,8 @@ gem 'puma', '~> 3.11'
 gem "kaminari"
 gem "redis"
 gem "sidekiq"
+gem 'elasticsearch-model', '~> 6.0'
+gem 'elasticsearch-rails', '~> 6.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'

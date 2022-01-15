@@ -1,0 +1,5 @@
+development: &default
+  host: <%= ENV.fetch("ELASTICSEARCH_URL") %>
+  log: true
+test:
+  host:  <%= ENV.fetch("ELASTICSEARCH_URL") %>

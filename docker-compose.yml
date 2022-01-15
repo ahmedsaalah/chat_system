@@ -20,15 +20,18 @@ services:
       depends_on:
           - redis
           - db
+          - es
       links:
           - db
           - redis
+          - es
       environment:
         DB_USER: root
         DB_NAME: app
         DB_PASSWORD: password
         DB_HOST: db
         REDIS_URL: redis://redis
+        ELASTICSEARCH_URL: http://es:9200
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -44,13 +47,12 @@ services:
 
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    container_name: es
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
       - discovery.type=single-node
-    networks:
-      - app-network
 
   kibana:
     image: 'docker.elastic.co/kibana/kibana:6.4.2'
@@ -60,8 +62,7 @@ services:
       ELASTICSEARCH_URL: http://es:9200
     ports:
       - '5601:5601'
-    networks:
-      - app-network
+
   redis:
     image: redis
     restart: "always"
@@ -69,9 +70,7 @@ services:
     ports:
       - "6379:6379"
 
-networks:
-  app-network:
-    driver: bridge
+
 volumes:
   data:
   bundle:
