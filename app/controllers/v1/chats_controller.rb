@@ -48,6 +48,7 @@ class V1::ChatsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_chat
       @chat = Application.where(token: params[:application_id]).first.chats.where(number: params[:id])
+      raise ActiveRecord::RecordNotFound unless @chat.present?
     end
 
     # Only allow a trusted parameter "white list" through.

@@ -50,6 +50,7 @@ class V1::ApplicationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_application
       @application = Application.where(token: params[:id]).first
+      raise ActiveRecord::RecordNotFound unless @application.present?
     end
 
     # Only allow a trusted parameter "white list" through.

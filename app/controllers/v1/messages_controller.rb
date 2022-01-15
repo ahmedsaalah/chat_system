@@ -49,11 +49,14 @@ class V1::MessagesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_message
       @message = Application.where(token: params[:application_id]).first.chats.where(number: params[:chat_id]).first.messages.find_by(number: params[:id])
+      raise ActiveRecord::RecordNotFound unless @message.present?
     end
 
     def set_chat
       application_id = Application.where(token: params[:application_id]).limit(1).pluck(:id)
+      raise ActiveRecord::RecordNotFound unless application_id.present?
       @chat_id = Chat.where(application_id: application_id, number: params[:chat_id]).limit(1).pluck(:id).first
+      raise ActiveRecord::RecordNotFound unless @chat_id.present?
     end
     # Only allow a trusted parameter "white list" through.
     def message_params
