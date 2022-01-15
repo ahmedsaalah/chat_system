@@ -14,7 +14,9 @@ class Application < ApplicationRecord
         {
             name: name,
             token: token,
-            chats_count: chats_count
+            chats_count: chats_count,
+            created_at: created_at,
+            updated_at: updated_at
         }
     end
 end
