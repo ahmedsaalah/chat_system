@@ -42,7 +42,11 @@ class V1::MessagesController < ApplicationController
 
   # DELETE /messages/1
   def destroy
-    @message.destroy
+    if @message.destroy
+      render json: @chat
+    else
+      render json: @message.errors, status: :unprocessable_entity
+    end
   end
 
   private
@@ -60,7 +64,7 @@ class V1::MessagesController < ApplicationController
     end
     # Only allow a trusted parameter "white list" through.
     def message_params
-      params.permit(:query, :message=>[:text])
+      params.require(:message).permit(:query, :text)
     end
 
     
