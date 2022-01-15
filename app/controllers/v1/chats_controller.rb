@@ -3,8 +3,9 @@ class V1::ChatsController < ApplicationController
 
   # GET /chats
   def index
-    @chats = Chat.page(params[:page]||1).per(params[:per_page]||10)
-
+    application_id = Application.where(token: params[:application_id]).pluck(:id)
+    raise ActiveRecord::RecordNotFound unless application_id.present?
+    @chats = Chat.where(application_id: application_id).page(params[:page]||1).per(params[:per_page]||10)
     if @chats.out_of_range?
       render json: {status: 404 , message: "page out of range"},status: :not_found
     else
