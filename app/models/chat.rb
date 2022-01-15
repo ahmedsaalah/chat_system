@@ -6,4 +6,14 @@ class Chat < ApplicationRecord
     def add_to_redis_message_number
         Redis.current.set("#{self.application_id}-#{self.number}", 0)
     end
+
+    def as_json(options = {})
+        {
+            number: number,
+            messages_count: messages_count,
+            created_at: created_at,
+            updated_at: updated_at
+
+        }
+    end
 end
