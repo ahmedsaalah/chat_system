@@ -20,7 +20,7 @@
  ```sh
 docker-compose up -d
 ```
-- Test cases 
+- To run sidekiq
 ```sh
 cd api
 docker-compose exec chat_system_app_1  sidekiq
@@ -39,7 +39,7 @@ docker-compose exec chat_system_app_1  bundle exec rspec
 | phpmyAdmin | http://localhost:7001/ user:root password:password |
 
 ## Postman
-- import the collection and enviroment
+- Import the collection and enviroment https://learning.postman.com/docs/getting-started/importing-and-exporting-data/
 
 
 
