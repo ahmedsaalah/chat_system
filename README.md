@@ -1,24 +1,45 @@
-# README
+# chat syste,.
+## Built with
+- Rails
+- Redis 
+- docker
+- sidekiq
+- mysql
+- phpmyadmin
+- kibana and elasticsearch
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
 
-* Ruby version
 
-* System dependencies
+## Prerequisites
+  1. docker
+  2. docker-compose https://docs.docker.com/engine/install/ubuntu/
+## Installation Steps
+- clone the repo
+- API
+ ```sh
+docker-compose up -d
+```
+- Test cases 
+```sh
+cd api
+docker-compose exec chat_system_app_1  sidekiq
+```
 
-* Configuration
+- Test cases 
+```sh
+cd api
+docker-compose exec chat_system_app_1  bundle exec rspec
+```
+## Browse URLs
+| Service | URL |
+| ------ | ------ |
+| Api | http://localhost:3001/v1 |
+| kibana | http://localhost:5601 |
+| phpmyAdmin | http://localhost:7001/ user:root password:password |
 
-* Database creation
+## Postman
+- import the collection and enviroment
 
-* Database initialization
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
