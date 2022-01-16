@@ -1,0 +1,439 @@
+{
+	"info": {
+		"_postman_id": "e08d189f-dcf9-4f75-828f-79daae7816fb",
+		"name": "chat_system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Applications",
+			"item": [
+				{
+					"name": "Get Applications",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications?page=1&per_page=1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create application",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"app_token\", data.application.token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"application\": {\n        \"name\": \"app_1\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/applications",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications"
+							]
+						}		},
+					"response": []
+				},
+				{
+					"name": "Get Application",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Application",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"application\": {\n        \"name\": \"appNameUpdated\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}"
+							]
+						}			},
+					"response": []
+				},
+				{
+					"name": "Delete Application",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/v1/applications/{{app_token}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chats",
+			"item": [
+				{
+					"name": "Get Chats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats?page=1&per_page=3",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"chat_number\", data.number);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chat",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Get Messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}/messages?message[query]=hi&page=1&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages"
+							],
+							"query": [
+								{
+									"key": "message[query]",
+									"value": "hi"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Mesage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"message_number\", data.number);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": {\n        \"text\": \"message hi\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}/messages",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Message",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}/messages/{{message_number}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{message_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Message",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"message\": {\n        \"body\": \"Updated body\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}/messages/{{message_number}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{message_number}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Message",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/v1/applications/{{app_token}}/chats/{{chat_number}}/messages/{{message_number}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"applications",
+								"{{app_token}}",
+								"chats",
+								"{{chat_number}}",
+								"messages",
+								"{{message_number}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
